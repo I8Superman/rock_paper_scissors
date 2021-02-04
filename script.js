@@ -43,7 +43,7 @@ function figureClicked() {
     elem.classList.add("shake");
   });
   document
-    .querySelector(".player")
+    .querySelector("#player1")
     .addEventListener("animationend", checkResult);
   // AI's choise is randomly generated
   // Player and AI's choises are compared - points are awarded if there is a win and newRound() is initiated
@@ -53,6 +53,14 @@ function figureClicked() {
 
 function checkResult() {
   console.log("The results are in!");
+  document.querySelectorAll(".player").forEach((elem) => {
+    elem.classList.remove("shake");
+  });
+  document
+    .querySelector("#player1")
+    .removeEventListener("animationend", checkResult);
+
+  document.querySelector("#player1").classList.add(player_choice);
 }
 
 function newRound() {
