@@ -32,7 +32,7 @@ function startGame() {
 }
 
 function figureClicked() {
-  console.log("Figure clicked");
+  // console.log("Figure clicked");
   // this gets the element that was clicked
   let figure = this;
   // console.log(this);
