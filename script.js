@@ -9,7 +9,22 @@ let player_choice;
 let ai_choice;
 
 function startGame() {
-  console.log("Game has started");
+  document.querySelectorAll(".result").forEach((res) => {
+    res.classList.add("hidden");
+  });
+  // Victory conditions
+  if (player_points == 2) {
+    document.querySelector("#victory").classList.remove("hidden");
+  }
+  if (ai_points == 2) {
+    document.querySelector("#defeat").classList.remove("hidden");
+  }
+  // Remove figure classes from hands so they don't pile up!
+  document.querySelector("#player1").classList.remove(player_choice);
+  document.querySelector("#player2").classList.remove(ai_choice);
+  document.querySelector("#gamefield").removeEventListener("click", startGame);
+  round_nr++;
+  console.log("Round " + round_nr + " has started!");
   // Add click events to all the buttons
   document.querySelectorAll("#buttons button").forEach((elem) => {
     elem.addEventListener("click", figureClicked);
@@ -21,7 +36,7 @@ function figureClicked() {
   // this gets the element that was clicked
   let figure = this;
   // console.log(this);
-  // Set player_choice variable to be equal to class name
+  // Set player_choice variable to be equal to class name of buton clicked
   player_choice = this.getAttribute("class");
   console.log("You chose " + player_choice);
   // Add shake animation
@@ -29,10 +44,6 @@ function figureClicked() {
     elem.classList.add("shake");
   });
   document.querySelector("#player1").addEventListener("animationend", checkResult);
-  // AI's choise is randomly generated
-  // Player and AI's choises are compared - points are awarded if there is a win and newRound() is initiated
-  // Result of round is shown (You win/loose this round! It's a draw!)
-  // If player or AI has 2 points, initiate gameEnd()
 }
 
 function checkResult() {
@@ -54,35 +65,24 @@ function checkResult() {
     ai_choice = "scissors";
   }
   console.log("AI chose " + ai_choice);
+  // Remove shake animationend event and the click events on the buttons
   document.querySelector("#player1").removeEventListener("animationend", checkResult);
+  document.querySelectorAll("#buttons button").forEach((elem) => {
+    elem.removeEventListener("click", figureClicked);
+  });
   document.querySelector("#player1").classList.add(player_choice);
   document.querySelector("#player2").classList.add(ai_choice);
-
-  if (player_choice == "rock" && ai_choice == "paper") {
+  // Find the winner
+  if (player_choice == "rock" && ai_choice == "paper" || player_choice == "paper" && ai_choice == "scissors" || player_choice == "scissors" && ai_choice == "rock") {
     document.querySelector("#lose").classList.remove("hidden");
-  } else if (player_choice == "paper" && ai_choice == "scissors") {
-    document.querySelector("#lose").classList.remove("hidden");
-  } else if (player_choice == "scissors" && ai_choice == "rock") {
-    document.querySelector("#lose").classList.remove("hidden");
+    ai_points++
   } else if (player_choice == ai_choice) {
     document.querySelector("#draw").classList.remove("hidden");
   } else {
     document.querySelector("#win").classList.remove("hidden");
+    player_points++
   }
-
-  document.querySelector("#gamefield").addEventListener("click", newRound);
-}
-
-function newRound() {
-  console.log("New round begun");
-  // Eventlisteners are reset
-  // Info on status conveyed to player
-  // Initiate startGame (right??)
-  //
-}
-
-function endGame() {
-  console.log("Game has ended!");
-  // If player has 2 points - YOU WIN!
-  // If AI has 2 points - YOU LOSE!
+  console.log("Score is " + player_points + " vs " + ai_points + "!");
+  setTimeout(startGame, 3000);
+  document.querySelector("#gamefield").addEventListener("click", startGame);
 }
