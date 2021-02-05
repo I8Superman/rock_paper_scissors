@@ -36,7 +36,7 @@ function figureClicked() {
 }
 
 function checkResult() {
-  console.log("The results are in!");
+  // console.log("The results are in!");
   document.querySelectorAll(".player").forEach((elem) => {
     elem.classList.remove("shake");
   });
@@ -57,6 +57,20 @@ function checkResult() {
   document.querySelector("#player1").removeEventListener("animationend", checkResult);
   document.querySelector("#player1").classList.add(player_choice);
   document.querySelector("#player2").classList.add(ai_choice);
+
+  if (player_choice == "rock" && ai_choice == "paper") {
+    document.querySelector("#lose").classList.remove("hidden");
+  } else if (player_choice == "paper" && ai_choice == "scissors") {
+    document.querySelector("#lose").classList.remove("hidden");
+  } else if (player_choice == "scissors" && ai_choice == "rock") {
+    document.querySelector("#lose").classList.remove("hidden");
+  } else if (player_choice == ai_choice) {
+    document.querySelector("#draw").classList.remove("hidden");
+  } else {
+    document.querySelector("#win").classList.remove("hidden");
+  }
+
+  document.querySelector("#gamefield").addEventListener("click", newRound);
 }
 
 function newRound() {
